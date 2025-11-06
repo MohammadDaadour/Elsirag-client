@@ -86,7 +86,7 @@ export default function CheckoutPage() {
       quantity: item.quantity
     }));
 
-    const orderData: Order = {
+    const orderData: any = {
       deliveryNeeded,
       shipping: deliveryNeeded ? shippingInfo : undefined,
       paymentMethod,
