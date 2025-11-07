@@ -57,12 +57,12 @@ export default function RegisterPage() {
 
   const handleGoogle = (e: React.MouseEvent) => {
     e.preventDefault();
-    window.location.href = 'http://localhost:3200/auth/google';
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
   }
 
   const handleFacebook = (e: React.MouseEvent) => {
     e.preventDefault();
-    window.location.href = 'http://localhost:3200/auth/facebook';
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/facebook`;
   }
 
 
