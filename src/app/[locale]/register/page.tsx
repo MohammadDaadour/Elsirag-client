@@ -16,6 +16,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordConf, setPasswordConf] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<string>("");
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -24,9 +25,12 @@ export default function RegisterPage() {
     if (loading) return;
 
     setLoading(true);
+    setPasswordError(""); // Clear previous error
 
     if (password !== passwordConf) {
+      setPasswordError(t('passwordsMismatch'));
       toast.error(t('passwordsMismatch'));
+      setLoading(false);
       return;
     }
 
@@ -104,7 +108,12 @@ export default function RegisterPage() {
             disabled={loading}
             className={`w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-stone-700 transition-all ${loading ? 'opacity-50' : ''}`}
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPasswordConf(e.target.value);
+              if (passwordError && password === e.target.value) {
+                setPasswordError(""); 
+              }
+            }}
             placeholder="••••••••"
           />
         </div>
