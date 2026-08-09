@@ -32,6 +32,8 @@
   },
   "Header": {
     "home": "Home",
+    "catalogue": "Catalogue",
+    "about": "About",
     "categories": "Categories",
     "noCat": "No categories found",
     "contact": "Contact",
@@ -92,19 +94,74 @@
   },
   "ProductPage": {
     "featured": "Featured",
-    "inStock": "in stock",
-    "outOfStock": "Out of stock",
-    "addToCart": "Add to Cart",
-    "buyNow": "Buy Now",
-    "freeShipping": "Free shipping",
-    "returns": "30-day returns",
-    "currency": "EGP"
+    "wholesalePrice": "Wholesale price",
+    "currency": "EGP",
+    "specifications": "Specifications",
+    "perCarton": "{count} per carton",
+    "optionColumn": "Option",
+    "priceColumn": "Wholesale price",
+    "askOnWhatsApp": "Ask about this product on WhatsApp"
   },
   "ProductCard": {
-    "addToCart": "Add to Cart",
-    "available": "available",
-    "outOfStock": "Out of stock",
+    "wholesalePrice": "Wholesale price",
+    "from": "From",
     "view": "View"
+  },
+  "HomePage": {
+    "categoriesTitle": "Browse by category",
+    "categoriesLink": "View full catalogue",
+    "aboutTitle": "Made in Egypt, supplied to retailers",
+    "aboutBody": "PLACEHOLDER — Two or three sentences about who you are and why shops stock your notebooks.",
+    "aboutLink": "More about us",
+    "contactTitle": "Interested in stocking our range?",
+    "contactBody": "Message us on WhatsApp for trade pricing and minimum order quantities.",
+    "contactAction": "Message on WhatsApp"
+  },
+  "AboutPage": {
+    "title": "About Elsirag",
+    "intro": "PLACEHOLDER — Write one or two sentences introducing the company: what you make, where, and roughly how long you have been doing it.",
+    "storyTitle": "Our story",
+    "storyBody": "PLACEHOLDER — Replace with your company history. When was the factory founded, by whom, and how has the range grown since?",
+    "manufacturingTitle": "How we make them",
+    "manufacturingBody": "PLACEHOLDER — Describe your production: the paper you use, binding methods, quality checks, and your monthly capacity.",
+    "whyTitle": "Why retailers buy from us",
+    "whyBody": "PLACEHOLDER — Explain what makes you a good supplier: consistent quality, reliable lead times, flexible order sizes, or custom branding.",
+    "ctaTitle": "Want the full range?",
+    "ctaBody": "Browse the catalogue or message us for trade pricing.",
+    "ctaCatalogue": "View catalogue",
+    "ctaContact": "Contact us"
+  },
+  "ContactPage": {
+    "title": "Contact us",
+    "subtitle": "Message us for trade pricing, samples, or anything else.",
+    "whatsappTitle": "WhatsApp",
+    "whatsappBody": "Fastest way to reach us.",
+    "whatsappAction": "Message on WhatsApp",
+    "phoneTitle": "Phone",
+    "phoneValue": "PLACEHOLDER — add your phone number",
+    "addressTitle": "Address",
+    "addressValue": "PLACEHOLDER — add your factory or office address",
+    "hoursTitle": "Opening hours",
+    "hoursValue": "PLACEHOLDER — e.g. Saturday to Thursday, 9am to 5pm",
+    "socialTitle": "Find us online",
+    "facebook": "Facebook",
+    "telegram": "Telegram"
+  },
+  "CataloguePage": {
+    "title": "Catalogue",
+    "subtitle": "Our full range. Message us on WhatsApp for trade pricing.",
+    "searchPlaceholder": "Search products...",
+    "allCategories": "All",
+    "allProducts": "All products",
+    "allProductsDescription": "Browse everything we make.",
+    "browseCategories": "Categories",
+    "noCategories": "No categories yet.",
+    "productCount": "{count} products",
+    "backToCatalogue": "All categories",
+    "noResults": "No products match your search.",
+    "loadMore": "Load more",
+    "loading": "Loading...",
+    "showing": "Showing {shown} of {total}"
   },
   "CartPage": {
     "title": "Shopping Cart",
@@ -244,7 +301,7 @@
     "title_2": "With Our Notebooks",
     "description": "Discover high-quality notebooks crafted in Egypt",
     "description_2": "for all your creative needs and inspirations",
-    "button": "Shop Now"
+    "button": "View catalogue"
   },
   "cart": {
     "added": "Added to cart!",

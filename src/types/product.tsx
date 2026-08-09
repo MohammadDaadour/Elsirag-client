@@ -1,8 +1,38 @@
-import { Attribute } from "./variants";
-
 export interface Img {
   url: string,
   publicId: string
+}
+
+/** A row in a product's spec table, e.g. { label: "Size", value: "A5" }. */
+export interface ProductSpec {
+  label: string;
+  value: string;
+}
+
+/** A sheet-count and its wholesale price, e.g. { label: "60 sheets", price: 45 }. */
+export interface ProductPriceOption {
+  label: string;
+  price: number | string;
+}
+
+/**
+ * What a card should show: the cheapest sheet-count option when a product has
+ * them, otherwise its single price. `from` tells the caller to prefix the
+ * figure, since the other options cost more.
+ */
+export function displayPrice(product: {
+  price?: number | string;
+  priceOptions?: ProductPriceOption[] | null;
+}): { amount: number; from: boolean } {
+  const options = (product?.priceOptions ?? [])
+    .map(o => Number(o.price))
+    .filter(n => Number.isFinite(n));
+
+  if (options.length > 0) {
+    return { amount: Math.min(...options), from: options.length > 1 };
+  }
+
+  return { amount: Number(product?.price ?? 0), from: false };
 }
 
 export interface Product {
@@ -17,7 +47,9 @@ export interface Product {
     id: number;
     name: string;
   };
-  attributes: Attribute[]
+  packSize?: number | null;
+  specs?: ProductSpec[] | null;
+  priceOptions?: ProductPriceOption[] | null;
 }
 
 export interface PaginatedResponse<T> {

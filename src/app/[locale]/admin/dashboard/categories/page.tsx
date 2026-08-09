@@ -18,6 +18,8 @@ function page() {
     const [editingCategoryId, setEditingCategoryId] = useState<number | null>(null);
     const [editName, setEditName] = useState<string>('');
     const [editDescription, setEditDescription] = useState<string>('');
+    const [image, setImage] = useState<File | null>(null);
+    const [editImage, setEditImage] = useState<File | null>(null);
 
     const getCategories = async () => {
         try {
@@ -30,34 +32,48 @@ function page() {
         }
     };
 
+    // Sent as multipart so the tile image can travel with the text fields.
+    const buildFormData = (values: { name: string; description: string; file: File | null }) => {
+        const formData = new FormData();
+        formData.append('name', values.name);
+        formData.append('description', values.description);
+        if (values.file) formData.append('image', values.file);
+        return formData;
+    };
+
     const handleCreation = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const { status } = await axios.post('/categories', { name, description });
+            await axios.post('/categories', buildFormData({ name, description, file: image }), {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
             toast.success('Category created successfully!');
             setName('');
             setDescription('');
+            setImage(null);
             setShowForm(false);
             await getCategories();
-        } catch (err) {
+        } catch (err: any) {
             console.log('error: ', err);
-            toast.error('Failed to create category.');
+            toast.error(err.response?.data?.message || 'Failed to create category.');
         }
     };
 
     const handleUpdate = async (e: React.FormEvent, id: number) => {
         e.preventDefault();
         try {
-            await axios.patch(`/categories/${id}`, {
-                name: editName,
-                description: editDescription,
-            });
+            await axios.patch(
+                `/categories/${id}`,
+                buildFormData({ name: editName, description: editDescription, file: editImage }),
+                { headers: { 'Content-Type': 'multipart/form-data' } },
+            );
             toast.success('Category updated');
             setEditingCategoryId(null);
+            setEditImage(null);
             await getCategories();
-        } catch (err) {
+        } catch (err: any) {
             console.error('Update error:', err);
-            toast.error('Failed to update');
+            toast.error(err.response?.data?.message || 'Failed to update');
         }
     }
 
@@ -96,6 +112,8 @@ function page() {
                     setName={setName}
                     description={description}
                     setDescription={setDescription}
+                    image={image}
+                    setImage={setImage}
                     handleCreation={handleCreation}
                 />
             )}
@@ -104,7 +122,8 @@ function page() {
                 <table className='w-full table-auto mt-4 border-separate border-spacing-y-3'>
                     <thead>
                         <tr className='text-left bg-white w-full shadow-sm'>
-                            <th className='p-4'>Name</th>
+                            <th className='p-4'>Image</th>
+                            <th>Name</th>
                             <th>Description</th>
                             <th>Operations</th>
                         </tr>
@@ -113,7 +132,8 @@ function page() {
                         {categories.map((cat: any) => (
                             <React.Fragment key={cat.id}>
                                 <tr className="bg-white border w-full shadow-sm">
-                                    <td className='p-4'>{cat.name}</td>
+                                    <td className='p-4'>{cat.image?.url ? <img src={cat.image.url} alt={cat.name} className='w-16 h-12 object-cover rounded' /> : <span className='text-xs text-gray-400'>none</span>}</td>
+                                    <td>{cat.name}</td>
                                     <td>{cat.description || '. . . . . . . . .'}</td>
                                     <td>
                                         <div className="flex items-center gap-3 text-2xl text-stone-700">
@@ -122,6 +142,7 @@ function page() {
                                                     setEditingCategoryId(cat.id);
                                                     setEditName(cat.name);
                                                     setEditDescription(cat.description || '');
+                                                    setEditImage(null);
                                                 }}
                                                 className="cursor-pointer mx-2 hover:text-green-600 transition-colors"
                                             />
@@ -135,13 +156,15 @@ function page() {
                                 </tr>
                                 {editingCategoryId === cat.id && (
                                     <tr>
-                                        <td colSpan={3} className="bg-stone-50">
+                                        <td colSpan={4} className="bg-stone-50">
                                             <UpdateCategoryForm
                                                 cat={cat}
                                                 editName={editName}
                                                 setEditName={setEditName}
                                                 editDescription={editDescription}
                                                 setEditDescription={setEditDescription}
+                                                editImage={editImage}
+                                                setEditImage={setEditImage}
                                                 setEditingCategoryId={setEditingCategoryId}
                                                 handleUpdate={(e) => handleUpdate(e, cat.id)}
                                             />

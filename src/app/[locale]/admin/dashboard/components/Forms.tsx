@@ -5,7 +5,8 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import toast from 'react-hot-toast';
 import { Product, Img } from '@/types/product';
 import { Category } from '@/types/category';
-import { Attribute, Option, Variant } from '@/types/variants';
+import { ProductSpec, ProductPriceOption } from '@/types/product';
+import TradeFieldsEditor from './TradeFieldsEditor';
 import axios from 'axios';
 
 interface CreateCategoryProps {
@@ -14,20 +15,77 @@ interface CreateCategoryProps {
     setName: (value: string) => void;
     description: string;
     setDescription: (value: string) => void;
+    image: File | null;
+    setImage: (value: File | null) => void;
 }
 
 interface UpdateCategoryProps {
     cat: {
         id: number,
         name: string,
-        description: string
+        description: string,
+        image?: { url: string; public_id: string } | null
     };
     handleUpdate: (e: React.FormEvent, id: number) => void;
     editName: string;
     setEditName: (value: string) => void;
     editDescription: string;
     setEditDescription: (value: string) => void;
+    editImage: File | null;
+    setEditImage: (value: File | null) => void;
     setEditingCategoryId: (id: number | null) => void;
+}
+
+/** Shared picker for a category's tile image, with a preview of the choice. */
+function CategoryImagePicker({
+    file,
+    setFile,
+    currentUrl,
+}: {
+    file: File | null;
+    setFile: (value: File | null) => void;
+    currentUrl?: string | null;
+}) {
+    const previewUrl = file ? URL.createObjectURL(file) : currentUrl;
+
+    return (
+        <div>
+            <label className="block mb-1 text-sm font-medium">Tile image</label>
+            <div className="flex items-center gap-4">
+                {previewUrl ? (
+                    <img
+                        src={previewUrl}
+                        alt="Category tile preview"
+                        className="w-24 h-20 object-cover rounded-md border"
+                    />
+                ) : (
+                    <div className="w-24 h-20 rounded-md border border-dashed flex items-center justify-center text-xs text-gray-400">
+                        None
+                    </div>
+                )}
+                <div className="flex-1">
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                        className="text-sm"
+                    />
+                    {file && (
+                        <button
+                            type="button"
+                            onClick={() => setFile(null)}
+                            className="block mt-2 text-xs text-red-500 hover:text-red-700 cursor-pointer"
+                        >
+                            Clear selection
+                        </button>
+                    )}
+                    <p className="mt-1 text-xs text-gray-500">
+                        Shown on the catalogue index. Leave empty to keep the current image.
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export function CreateCategoryForm({
@@ -36,6 +94,8 @@ export function CreateCategoryForm({
     setName,
     description,
     setDescription,
+    image,
+    setImage,
 }: CreateCategoryProps) {
     return (
         <div className="mt-6 p-6 bg-white rounded-md shadow-lg animate-fade-in-down">
@@ -63,10 +123,12 @@ export function CreateCategoryForm({
                     ></textarea>
                 </div>
 
+                <CategoryImagePicker file={image} setFile={setImage} />
+
                 <div className="flex justify-end">
                     <button
                         type="submit"
-                        className="bg-stone-800 text-white px-6 py-2 rounded-md hover:bg-stone-700 transition-colors cursor-pointer cursor-pointer"
+                        className="bg-stone-800 text-white px-6 py-2 rounded-md hover:bg-stone-700 transition-colors cursor-pointer"
                     >
                         Save
                     </button>
@@ -84,6 +146,8 @@ export function UpdateCategoryForm(
         setEditName,
         editDescription,
         setEditDescription,
+        editImage,
+        setEditImage,
         setEditingCategoryId,
     }: UpdateCategoryProps) {
     return (<form
@@ -105,6 +169,13 @@ export function UpdateCategoryForm(
             rows={3}
             placeholder="Updated description"
         />
+
+        <CategoryImagePicker
+            file={editImage}
+            setFile={setEditImage}
+            currentUrl={cat.image?.url}
+        />
+
         <div className="flex justify-end gap-2">
             <button
                 type="submit"
@@ -136,8 +207,6 @@ interface CreateProductProps {
     setDescription: (value: string) => void;
     price: string;
     setPrice: (value: string) => void;
-    stock: string;
-    setStock: (value: string) => void;
     categories: Category[];
     selectedCategory: Category;
     setSelectedCategory: (category: Category | null) => void;
@@ -154,8 +223,6 @@ export function CreateProductForm({
     setDescription,
     price,
     setPrice,
-    stock,
-    setStock,
     categories,
     selectedCategory,
     setSelectedCategory,
@@ -212,7 +279,7 @@ export function CreateProductForm({
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!name || !description || !price || !stock || !categories) {
+        if (!name || !description || !price || !categories) {
             alert('Please fill in all required fields');
             return;
         }
@@ -262,18 +329,6 @@ export function CreateProductForm({
                             placeholder="0.00"
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="flex-1">
-                        <label className="block mb-1 text-sm font-medium">Stock</label>
-                        <input
-                            type="number"
-                            min="0"
-                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-stone-800"
-                            placeholder="0"
-                            value={stock}
-                            onChange={(e) => setStock(e.target.value)}
                             required
                         />
                     </div>
@@ -356,8 +411,10 @@ interface UpdateProductProps {
         name: string;
         description: string;
         price: number;
-        stock: number;
         category?: { id: number; name: string };
+        packSize?: number | null;
+        specs?: ProductSpec[] | null;
+        priceOptions?: ProductPriceOption[] | null;
     };
     categories: { id: number; name: string }[];
     onUpdate: (updatedData: {
@@ -365,8 +422,10 @@ interface UpdateProductProps {
         name: string;
         description: string;
         price: number;
-        stock: number;
         categoryId: number;
+        packSize: number | null;
+        specs: ProductSpec[];
+        priceOptions: { label: string; price: number }[];
     }) => Promise<void>;
     onCancel: () => void;
     isUpdating?: boolean;
@@ -382,13 +441,18 @@ export function UpdateProductForm({
     const [name, setName] = useState(product.name);
     const [description, setDescription] = useState(product.description);
     const [price, setPrice] = useState(product.price.toString());
-    const [stock, setStock] = useState(product.stock.toString());
     const [selectedCategory, setSelectedCategory] = useState(
         product.category?.id || ""
     );
+    const [packSize, setPackSize] = useState(
+        product.packSize != null ? String(product.packSize) : ""
+    );
+    const [specs, setSpecs] = useState<ProductSpec[]>(product.specs ?? []);
+    const [priceOptions, setPriceOptions] = useState<ProductPriceOption[]>(
+        product.priceOptions ?? []
+    );
 
     useEffect(() => {
-        console.log("Elmafroud cat henaaa:  ", product)
         if (categories.length > 0 && product.category?.id) {
             setSelectedCategory(product.category.id);
         }
@@ -396,14 +460,27 @@ export function UpdateProductForm({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Drop blank rows rather than saving empty labels.
+        const cleanSpecs = specs.filter(s => s.label.trim() !== '');
+        const cleanOptions = priceOptions
+            .filter(o => o.label.trim() !== '' && String(o.price).trim() !== '')
+            .map(o => ({ label: o.label.trim(), price: Number(o.price) }));
+
+        if (cleanOptions.some(o => Number.isNaN(o.price))) {
+            toast.error('Every sheet-count option needs a valid price.');
+            return;
+        }
+
         onUpdate({
             id: product.id,
             name,
             description,
             price: parseFloat(price),
-            stock: parseInt(stock),
             categoryId: Number(selectedCategory),
-
+            packSize: packSize.trim() === '' ? null : Number(packSize),
+            specs: cleanSpecs,
+            priceOptions: cleanOptions,
         });
     };
 
@@ -447,16 +524,6 @@ export function UpdateProductForm({
                             onChange={(e) => setPrice(e.target.value)}
                         />
                     </div>
-                    <div>
-                        <label className="block mb-1 text-sm font-medium">Stock</label>
-                        <input
-                            type="number"
-                            min="0"
-                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-stone-800"
-                            value={stock}
-                            onChange={(e) => setStock(e.target.value)}
-                        />
-                    </div>
                 </div>
 
                 <div>
@@ -474,6 +541,16 @@ export function UpdateProductForm({
                         ))}
                     </select>
                 </div>
+
+                <TradeFieldsEditor
+                    packSize={packSize}
+                    setPackSize={setPackSize}
+                    specs={specs}
+                    setSpecs={setSpecs}
+                    priceOptions={priceOptions}
+                    setPriceOptions={setPriceOptions}
+                    disabled={isUpdating}
+                />
 
                 <div className="flex justify-end gap-3">
                     <button
@@ -596,287 +673,6 @@ export function UpdateProductImagesForm({
                         className="bg-stone-800 text-white px-6 py-2 rounded-md hover:bg-stone-700 transition-colors"
                     >
                         {isUpdating ? "Updating..." : "Save Images"}
-                    </button>
-                </div>
-            </form>
-        </div>
-    );
-}
-
-interface assiningAttributeProps {
-    attributes: Attribute[] | null,
-    product: Product,
-    onCancel: () => void,
-    onAssign: (AssignData: {
-        productId: number,
-        selectedAttributes: number[],
-    }) => Promise<void>;
-}
-
-export function AssiningAttributeForm({ attributes, onAssign, onCancel, product }: assiningAttributeProps) {
-
-    const [selected, setSelected] = useState<number[]>(product.attributes.map(attr => attr.id));
-
-    const toggleAttribute = (id: number) => {
-        if (selected.includes(id)) {
-            setSelected(selected.filter((attrId) => attrId !== id));
-        } else {
-            setSelected([...selected, id]);
-        }
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        await onAssign({
-            productId: product.id,
-            selectedAttributes: selected
-        })
-    };
-
-    return (
-        <div className="mt-6 p-6 bg-white rounded-md shadow-lg animate-fade-in-down">
-            <h3 className="text-lg font-medium mb-4">Assign Attributes</h3>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md">
-                <div className="flex flex-col gap-2">
-                    {attributes?.map((attr) => (
-                        <label
-                            key={attr.id}
-                            className="flex items-center gap-2 p-2 border rounded-md hover:bg-gray-50"
-                        >
-                            <input
-                                type="checkbox"
-                                checked={selected.includes(attr.id)}
-                                onChange={() => toggleAttribute(attr.id)}
-                            />
-                            <span>{attr.name}</span>
-                        </label>
-                    ))}
-                </div>
-
-                <div className="flex gap-3">
-                    <button
-                        type="submit"
-                        className="px-4 py-2 bg-stone-900 text-white rounded-md hover:bg-stone-100 border hover:text-stone-900 transition-colors cursor-pointer"
-                    >
-                        Save
-                    </button>
-                    <button
-                        type="button"
-                        className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-200 transition-colors cursor-pointer"
-                        onClick={onCancel}
-                    >
-                        Cancel
-                    </button>
-                </div>
-            </form>
-        </div>
-    );
-}
-
-
-interface CreateAttributeProps {
-    handleCreation: (e: React.FormEvent) => void;
-    name: string;
-    setName: (value: string) => void;
-    type: string;
-    setType: (value: string) => void;
-    options: string[];
-    setOptions: (value: string[]) => void;
-}
-
-interface UpdateAttributeProps {
-    cat: {
-        id: number,
-        name: string,
-        description: string
-    };
-    handleUpdate: (e: React.FormEvent, id: number) => void;
-    editName: string;
-    setEditName: (value: string) => void;
-    editDescription: string;
-    setEditDescription: (value: string) => void;
-    setEditingCategoryId: (id: number | null) => void;
-}
-
-export function CreateAttributeForm({ handleCreation,
-    name,
-    setName,
-    type,
-    setType,
-    options,
-    setOptions,
-}: CreateAttributeProps) {
-    const [newOption, setNewOption] = useState("");
-
-    const addOption = () => {
-        if (newOption.trim() && !options.includes(newOption.trim())) {
-            setOptions([...options, newOption.trim()]);
-            setNewOption("");
-        }
-    };
-
-    const removeOption = (opt: string) => {
-        setOptions(options.filter((o) => o !== opt));
-    };
-
-    return (
-        <div className="mt-6 p-6 bg-white rounded-md shadow-lg animate-fade-in-down">
-            <h3 className="text-lg font-medium mb-4">Create New Attribute</h3>
-            <form onSubmit={handleCreation} className="flex flex-col gap-4 max-w-md">
-                {/* Attribute Name */}
-                <div>
-                    <label className="block mb-1 text-sm font-medium">Attribute Name</label>
-                    <input
-                        type="text"
-                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-stone-800"
-                        placeholder="e.g. Color"
-                        required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </div>
-
-                {/* Attribute Type */}
-                <div>
-                    <label className="block mb-1 text-sm font-medium">Type</label>
-                    <input
-                        type="text"
-                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-stone-800"
-                        placeholder="e.g. swatch / dropdown"
-                        value={type}
-                        onChange={(e) => setType(e.target.value)}
-                    />
-                </div>
-
-                {/* Options */}
-                <div>
-                    <label className="block mb-1 text-sm font-medium">Options</label>
-                    <div className="flex gap-2">
-                        <input
-                            type="text"
-                            className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-stone-800"
-                            placeholder="e.g. Red"
-                            value={newOption}
-                            onChange={(e) => setNewOption(e.target.value)}
-                        />
-                        <button
-                            type="button"
-                            onClick={addOption}
-                            className="bg-stone-800 text-white px-4 rounded-md hover:bg-stone-700 transition-colors"
-                        >
-                            Add
-                        </button>
-                    </div>
-
-                    {/* List of Options */}
-                    <ul className="mt-2 space-y-1">
-                        {options.map((opt) => (
-                            <li
-                                key={opt}
-                                className="flex justify-between items-center bg-gray-100 px-3 py-1 rounded-md"
-                            >
-                                <span>{opt}</span>
-                                <button
-                                    type="button"
-                                    onClick={() => removeOption(opt)}
-                                    className="text-red-500 hover:text-red-700 text-sm"
-                                >
-                                    Remove
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                {/* Submit */}
-                <div className="flex justify-end">
-                    <button
-                        type="submit"
-                        className="bg-stone-800 text-white px-6 py-2 rounded-md hover:bg-stone-700 transition-colors cursor-pointer"
-                    >
-                        Save
-                    </button>
-                </div>
-            </form>
-        </div>
-    );
-}
-
-
-interface GenerateVariantsFormProps {
-    product: Product;
-    onCancel: () => void;
-    onGenerate: (variants: Variant[]) => void;
-}
-
-export function GenerateVariantsForm({ product, onCancel, onGenerate }: GenerateVariantsFormProps) {
-    const [defaultPrice, setDefaultPrice] = useState<number | undefined>();
-    const [defaultStock, setDefaultStock] = useState<number | undefined>(0);
-    const [isLoading, setIsLoading] = useState(false);
-
-    const variantCount = product.attributes?.reduce((count, attr) => count * (attr.options?.length || 1), 1) || 0;
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (variantCount === 0) {
-            toast.error('No attributes or options available.');
-            return;
-        }
-        setIsLoading(true);
-        try {
-            const response = await axios.post(`/products/${product.id}/variants`, {
-                price: defaultPrice,
-                stock: defaultStock,
-            });
-            onGenerate(response.data);
-        } catch (error) {
-            toast.error('Failed to generate variants.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    return (
-        <div className="mt-6 p-6 bg-white rounded-md shadow-lg animate-fade-in-down">
-            <h3 className="text-lg font-medium mb-4">Generate Variants</h3>
-            {variantCount > 0 && <p className="text-gray-500">{variantCount} variants will be generated.</p>}
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md">
-                <label>
-                    <span>Default Price</span>
-                    <input
-                        type="number"
-                        value={defaultPrice ?? ''}
-                        onChange={(e) => setDefaultPrice(Number(e.target.value) || undefined)}
-                        className="p-2 border rounded-md mt-1 w-full"
-                        disabled={isLoading}
-                    />
-                </label>
-                <label>
-                    <span>Default Stock</span>
-                    <input
-                        type="number"
-                        value={defaultStock ?? ''}
-                        onChange={(e) => setDefaultStock(Number(e.target.value) || 0)}
-                        className="p-2 border rounded-md mt-1 w-full"
-                        disabled={isLoading}
-                    />
-                </label>
-                <div className="flex gap-3">
-                    <button
-                        type="submit"
-                        className="px-4 py-2 bg-stone-900 text-white rounded-md hover:bg-stone-100 border hover:text-stone-900 transition-colors"
-                        disabled={isLoading || variantCount === 0}
-                    >
-                        {isLoading ? 'Generating...' : 'Generate'}
-                    </button>
-                    <button
-                        type="button"
-                        className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-200 transition-colors"
-                        onClick={onCancel}
-                        disabled={isLoading}
-                    >
-                        Cancel
                     </button>
                 </div>
             </form>

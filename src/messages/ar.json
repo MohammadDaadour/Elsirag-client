@@ -1,6 +1,8 @@
 {
   "Header": {
     "home": "الرئيسية",
+    "catalogue": "الكتالوج",
+    "about": "من نحن",
     "categories": "الأقسام",
     "noCat": "لا يوجد أقسام",
     "contact": "تواصل معنا",
@@ -92,20 +94,75 @@
   },
   "ProductPage": {
     "featured": "مميز",
-    "inStock": "متوفر في المخزون",
-    "outOfStock": "غير متوفر في المخزون",
-    "addToCart": "أضف إلى السلة",
-    "buyNow": "اشترِ الآن",
-    "freeShipping": "شحن مجاني",
-    "returns": "استرجاع خلال 30 يومًا",
-    "currency": "ج.م"
+    "wholesalePrice": "سعر الجملة",
+    "currency": "ج.م",
+    "specifications": "المواصفات",
+    "perCarton": "{count} في الكرتونة",
+    "optionColumn": "المقاس",
+    "priceColumn": "سعر الجملة",
+    "askOnWhatsApp": "اسأل عن هذا المنتج على واتساب"
   },
   "ProductCard": {
-    "addToCart": "أضف إلى السلة",
-    "available": "متوفر",
-    "outOfStock": "غير متوفر",
+    "wholesalePrice": "سعر الجملة",
+    "from": "يبدأ من",
     "view": "عرض المنتج",
     "currency": "ج.م"
+  },
+  "HomePage": {
+    "categoriesTitle": "تصفح حسب القسم",
+    "categoriesLink": "عرض الكتالوج كاملاً",
+    "aboutTitle": "صناعة مصرية، لتجار التجزئة",
+    "aboutBody": "نص مؤقت — جملتان أو ثلاث عن هويتكم ولماذا تختار المحلات دفاتركم.",
+    "aboutLink": "المزيد عنا",
+    "contactTitle": "هل تريد توفير منتجاتنا في محلك؟",
+    "contactBody": "راسلنا على واتساب لمعرفة أسعار الجملة وأقل كمية للطلب.",
+    "contactAction": "راسلنا على واتساب"
+  },
+  "AboutPage": {
+    "title": "عن السراج",
+    "intro": "نص مؤقت — اكتب جملة أو جملتين للتعريف بالشركة: ماذا تصنعون، وأين، ومنذ متى.",
+    "storyTitle": "قصتنا",
+    "storyBody": "نص مؤقت — استبدله بتاريخ الشركة. متى تأسس المصنع، وعلى يد من، وكيف توسعت المنتجات منذ ذلك الحين؟",
+    "manufacturingTitle": "كيف نصنعها",
+    "manufacturingBody": "نص مؤقت — صف الإنتاج: نوع الورق، وطرق التجليد، وفحص الجودة، والطاقة الإنتاجية الشهرية.",
+    "whyTitle": "لماذا يشتري منا التجار",
+    "whyBody": "نص مؤقت — اشرح ما يميزكم كمورد: جودة ثابتة، ومواعيد تسليم موثوقة، ومرونة في الكميات، أو طباعة بعلامة العميل.",
+    "ctaTitle": "هل تريد المجموعة الكاملة؟",
+    "ctaBody": "تصفح الكتالوج أو راسلنا لمعرفة أسعار الجملة.",
+    "ctaCatalogue": "عرض الكتالوج",
+    "ctaContact": "تواصل معنا"
+  },
+  "ContactPage": {
+    "title": "تواصل معنا",
+    "subtitle": "راسلنا لمعرفة أسعار الجملة أو طلب عينات أو أي استفسار آخر.",
+    "whatsappTitle": "واتساب",
+    "whatsappBody": "أسرع طريقة للوصول إلينا.",
+    "whatsappAction": "راسلنا على واتساب",
+    "phoneTitle": "الهاتف",
+    "phoneValue": "نص مؤقت — أضف رقم الهاتف",
+    "addressTitle": "العنوان",
+    "addressValue": "نص مؤقت — أضف عنوان المصنع أو المكتب",
+    "hoursTitle": "مواعيد العمل",
+    "hoursValue": "نص مؤقت — مثال: من السبت إلى الخميس، ٩ صباحاً حتى ٥ مساءً",
+    "socialTitle": "تابعنا",
+    "facebook": "فيسبوك",
+    "telegram": "تيليجرام"
+  },
+  "CataloguePage": {
+    "title": "الكتالوج",
+    "subtitle": "مجموعتنا الكاملة. راسلنا على واتساب لأسعار الجملة.",
+    "searchPlaceholder": "ابحث عن منتج...",
+    "allCategories": "الكل",
+    "allProducts": "كل المنتجات",
+    "allProductsDescription": "تصفح كل ما نصنعه.",
+    "browseCategories": "الأقسام",
+    "noCategories": "لا توجد أقسام بعد.",
+    "productCount": "{count} منتج",
+    "backToCatalogue": "كل الأقسام",
+    "noResults": "لا توجد منتجات مطابقة لبحثك.",
+    "loadMore": "عرض المزيد",
+    "loading": "جارٍ التحميل...",
+    "showing": "عرض {shown} من {total}"
   },
   "CartPage": {
     "title": "سلة التسوق",
@@ -246,7 +303,7 @@
     "title_2": "مع دفاترنا المميزة",
     "description": "اكتشف دفاتر عالية الجودة مصنوعة في مصر",
     "description_2": "لتلهمك في كل إبداع وابتكار",
-    "button": "تسوق الآن"
+    "button": "عرض الكتالوج"
   },
   "cart": {
     "added": "تمت الإضافة إلى السلة!",

@@ -3,15 +3,12 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import elsirag_logo from '../assets/elsirag_logo.png';
-import { CiShoppingCart, CiHeart, CiSearch, CiGlobe, CiUser, CiFacebook } from "react-icons/ci";
-import { PiTelegramLogoThin, PiWhatsappLogoThin } from "react-icons/pi";
+import { CiSearch, CiGlobe, CiUser } from "react-icons/ci";
 import Link from 'next/link';
-import { GetUser, GetUserInfo } from './GetUser';
+import AdminMenu from './AdminMenu';
 import { SearchHandler, SearchHandlerMob } from './SearchHandler';
 import HoverMenu from './HoverMenu';
 import { useUser } from '@/context/UserContext';
-import { CategoryList, CategoryListContent } from './CategoryList';
-import { ContactList } from './ContactList';
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { useLocale } from 'next-intl';
@@ -23,8 +20,6 @@ export default function Header() {
     const currentLocale = useLocale();
     const { loading, user, isAuthenticated } = useUser();
     const [isNavOpen, setIsNavOpen] = useState(false);
-    const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-    const [isContactOpen, setIsContactOpen] = useState(false);
 
     const toggleNav = () => {
         setIsNavOpen(!isNavOpen);
@@ -32,18 +27,6 @@ export default function Header() {
 
     const closeNav = () => {
         setIsNavOpen(false);
-        setIsCategoryOpen(false);
-        setIsContactOpen(false);
-    }
-
-    const toggleCategory = () => {
-        setIsCategoryOpen(!isCategoryOpen);
-        setIsContactOpen(false); // Close contact when opening category
-    }
-
-    const toggleContact = () => {
-        setIsContactOpen(!isContactOpen);
-        setIsCategoryOpen(false); // Close category when opening contact
     }
 
     const switchLocale = (newLocale: 'en' | 'ar') => {
@@ -74,8 +57,15 @@ export default function Header() {
                         <Link href={'/'}>
                             <div className='hover:text-black cursor-pointer p-6 px-3'>{t('home')}</div>
                         </Link>
-                        <CategoryList />
-                        <ContactList />
+                        <Link href={'/catalogue'}>
+                            <div className='hover:text-black cursor-pointer p-6 px-3'>{t('catalogue')}</div>
+                        </Link>
+                        <Link href={'/about'}>
+                            <div className='hover:text-black cursor-pointer p-6 px-3'>{t('about')}</div>
+                        </Link>
+                        <Link href={'/contact'}>
+                            <div className='hover:text-black cursor-pointer p-6 px-3'>{t('contact')}</div>
+                        </Link>
                     </div>
                     <button
                         className="lg:hidden p-2 relative z-50 group w-[33%]"
@@ -110,16 +100,8 @@ export default function Header() {
                     <div className='flex lg:justify-center justify-end w-[33%]'>
                         <div className='flex items-center'>
                             <div className='lg:flex hidden'>
-                                <GetUser />
                                 <SearchHandler />
-                                <Link className='hover:text-black cursor-pointer p-6 px-3' href={'/cart'}>
-                                    <CiShoppingCart className='text-3xl text-gray-600 sm:text-2xl' />
-                                </Link>
-                                {isAuthenticated &&
-                                    <Link className='hover:text-black cursor-pointer p-6 px-3' href={'/wishlist'}>
-                                        <CiHeart className='text-4xl text-gray-600 sm:text-2xl' />
-                                    </Link>
-                                }
+                                <AdminMenu />
                                 <HoverMenu title={<CiGlobe className="text-4xl text-gray-600 sm:text-2xl" />}>
                                     <div className="bg-white shadow-lg border border-gray-300 absolute min-w-[200px] left-0 z-50  overflow-hidden">
                                         <button
@@ -142,9 +124,6 @@ export default function Header() {
                                 </HoverMenu>
                             </div>
 
-                            <Link className='lg:hidden hover:text-black cursor-pointer p-6 px-3' href={'/cart'}>
-                                <CiShoppingCart className='text-3xl text-gray-600' />
-                            </Link>
                         </div>
                     </div>
                 </div>
@@ -183,10 +162,8 @@ export default function Header() {
                             </div>
                         </div>
 
-                        <div className=" border-b border-gray-200">
-                            <div className="flex items-center justify-center text-black">
-                                <GetUserInfo />
-                            </div>
+                        <div className="flex items-center justify-center text-black">
+                            <AdminMenu onNavigate={closeNav} />
                         </div>
 
                         <div className="mb-8 pb-6 border-b border-gray-200">
@@ -198,88 +175,29 @@ export default function Header() {
                                     </div>
                                 </Link>
 
-                                <div>
-                                    <button
-                                        onClick={toggleCategory}
-                                        className='w-full text-left text-gray-600 hover:text-black cursor-pointer py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-between'
-                                    >
-                                        <span>{t('categories')}</span>
-                                        <svg
-                                            className={`w-4 h-4 transition-transform duration-200 ${isCategoryOpen ? 'rotate-180' : ''}`}
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                    </button>
-                                    {isCategoryOpen && (
-                                        <CategoryListContent />
-                                    )}
-                                </div>
-                                <div>
-                                    <button
-                                        onClick={toggleContact}
-                                        className='w-full text-left text-gray-600 hover:text-black cursor-pointer py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-between'
-                                    >
-                                        <span>{t('contact')}</span>
-                                        <svg
-                                            className={`w-4 h-4 transition-transform duration-200 ${isContactOpen ? 'rotate-180' : ''}`}
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                    </button>
-                                    {isContactOpen && (
-                                        <div className="text-gray-700 bg-white min-w-[300px] left-0 z-50">
-                                            <div>
-                                                <ul className="space-y-1 text-sm">
-                                                    <a href="https://api.whatsapp.com/send/?phone=201208959772&text&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer">
-                                                        <li className='flex items-center px-8 py-2 hover:bg-gray-200 duration-300 z-50'>    <PiWhatsappLogoThin className='text-gray-600 text-4xl sm:text-3xl mx-2' /> {t('whatsapp')}</li>
-                                                    </a>
-                                                    <a href="https://www.facebook.com/@alserajnotebook/" target="_blank" rel="noopener noreferrer">
-                                                        <li className='flex items-center px-8 py-2 hover:bg-gray-200 duration-300 z-50'> <CiFacebook className='text-4xl text-gray-600 sm:text-3xl mx-2' /> {t('facebook')}</li>
-                                                    </a>
-                                                    <a href="https://t.me/elsraj_factory" target="_blank" rel="noopener noreferrer">
-                                                        <li className='flex items-center px-8 py-2 pb-4 hover:bg-gray-200 duration-300 z-50'>  <PiTelegramLogoThin className='text-4xl text-gray-600 sm:text-3xl mx-2' />{t('telegram')}</li>
-                                                    </a>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
+                                <Link href={'/catalogue'} onClick={closeNav}>
+                                    <div className='text-gray-600 hover:text-black cursor-pointer py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors'>
+                                        {t('catalogue')}
+                                    </div>
+                                </Link>
+
+                                <Link href={'/about'} onClick={closeNav}>
+                                    <div className='text-gray-600 hover:text-black cursor-pointer py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors'>
+                                        {t('about')}
+                                    </div>
+                                </Link>
+
+                                <Link href={'/contact'} onClick={closeNav}>
+                                    <div className='text-gray-600 hover:text-black cursor-pointer py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors'>
+                                        {t('contact')}
+                                    </div>
+                                </Link>
                             </div>
                         </div>
 
                         <div className="mb-8">
                             {/* <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3> */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <Link
-                                    className='flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors'
-                                    href={'/cart'}
-                                    onClick={closeNav}
-                                >
-                                    <CiShoppingCart className='text-4xl text-gray-600 mb-2' />
-                                    <span className="text-sm text-gray-600">{t('cart')}</span>
-                                </Link>
-
-                                {isAuthenticated && (
-                                    <Link
-                                        className='flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors'
-                                        href={'/wishlist'}
-                                        onClick={closeNav}
-                                    >
-                                        <CiHeart className='text-4xl text-gray-600 mb-2' />
-                                        <span className="text-sm text-gray-600">{t('wishlist')}</span>
-                                    </Link>
-                                )}
-
-                                {/* <div className='flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer'>
-                                    <CiGlobe className='text-4xl text-gray-600 mb-2' />
-                                    <span className="text-sm text-gray-600">{t('language')}</span>
-                                </div> */}
+                            <div className="grid grid-cols-1 gap-4">
                                 <div className='flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer'>
                                         <button
                                             onClick={() => switchLocale('en')}
