@@ -15,6 +15,10 @@ interface CreateCategoryProps {
     setName: (value: string) => void;
     description: string;
     setDescription: (value: string) => void;
+    nameAr: string;
+    setNameAr: (value: string) => void;
+    descriptionAr: string;
+    setDescriptionAr: (value: string) => void;
     image: File | null;
     setImage: (value: File | null) => void;
 }
@@ -24,6 +28,8 @@ interface UpdateCategoryProps {
         id: number,
         name: string,
         description: string,
+        nameAr?: string | null,
+        descriptionAr?: string | null,
         image?: { url: string; public_id: string } | null
     };
     handleUpdate: (e: React.FormEvent, id: number) => void;
@@ -31,6 +37,10 @@ interface UpdateCategoryProps {
     setEditName: (value: string) => void;
     editDescription: string;
     setEditDescription: (value: string) => void;
+    editNameAr: string;
+    setEditNameAr: (value: string) => void;
+    editDescriptionAr: string;
+    setEditDescriptionAr: (value: string) => void;
     editImage: File | null;
     setEditImage: (value: File | null) => void;
     setEditingCategoryId: (id: number | null) => void;
@@ -94,6 +104,10 @@ export function CreateCategoryForm({
     setName,
     description,
     setDescription,
+    nameAr,
+    setNameAr,
+    descriptionAr,
+    setDescriptionAr,
     image,
     setImage,
 }: CreateCategoryProps) {
@@ -123,6 +137,27 @@ export function CreateCategoryForm({
                     ></textarea>
                 </div>
 
+                <div dir="rtl">
+                    <label className="block mb-1 text-sm font-medium">الاسم بالعربية</label>
+                    <input
+                        type="text"
+                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-stone-800"
+                        placeholder="مثال: كشاكيل"
+                        value={nameAr}
+                        onChange={(e) => setNameAr(e.target.value)}
+                    />
+                </div>
+
+                <div dir="rtl">
+                    <label className="block mb-1 text-sm font-medium">الوصف بالعربية (اختياري)</label>
+                    <textarea
+                        rows={2}
+                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-stone-800 resize-none"
+                        value={descriptionAr}
+                        onChange={(e) => setDescriptionAr(e.target.value)}
+                    ></textarea>
+                </div>
+
                 <CategoryImagePicker file={image} setFile={setImage} />
 
                 <div className="flex justify-end">
@@ -146,6 +181,10 @@ export function UpdateCategoryForm(
         setEditName,
         editDescription,
         setEditDescription,
+        editNameAr,
+        setEditNameAr,
+        editDescriptionAr,
+        setEditDescriptionAr,
         editImage,
         setEditImage,
         setEditingCategoryId,
@@ -168,6 +207,22 @@ export function UpdateCategoryForm(
             className="px-4 py-2 border rounded"
             rows={3}
             placeholder="Updated description"
+        />
+        <input
+            type="text"
+            dir="rtl"
+            value={editNameAr}
+            onChange={(e) => setEditNameAr(e.target.value)}
+            className="px-4 py-2 border rounded"
+            placeholder="الاسم بالعربية"
+        />
+        <textarea
+            dir="rtl"
+            value={editDescriptionAr}
+            onChange={(e) => setEditDescriptionAr(e.target.value)}
+            className="px-4 py-2 border rounded"
+            rows={2}
+            placeholder="الوصف بالعربية"
         />
 
         <CategoryImagePicker
@@ -205,6 +260,10 @@ interface CreateProductProps {
     setName: (value: string) => void;
     description: string;
     setDescription: (value: string) => void;
+    nameAr: string;
+    setNameAr: (value: string) => void;
+    descriptionAr: string;
+    setDescriptionAr: (value: string) => void;
     price: string;
     setPrice: (value: string) => void;
     categories: Category[];
@@ -221,6 +280,10 @@ export function CreateProductForm({
     setName,
     description,
     setDescription,
+    nameAr,
+    setNameAr,
+    descriptionAr,
+    setDescriptionAr,
     price,
     setPrice,
     categories,
@@ -318,6 +381,27 @@ export function CreateProductForm({
                         required
                     />
                 </div>
+                <div className="grid grid-cols-1 gap-4 p-4 rounded-md bg-stone-50 border" dir="rtl">
+                    <p className="text-xs text-gray-500">يظهر على الموقع العربي. إذا تُرك فارغاً يظهر النص الإنجليزي.</p>
+                    <div>
+                        <label className="block mb-1 text-sm font-medium">الاسم بالعربية</label>
+                        <input
+                            type="text"
+                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-stone-800"
+                            value={nameAr}
+                            onChange={(e) => setNameAr(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-1 text-sm font-medium">الوصف بالعربية</label>
+                        <textarea
+                            rows={2}
+                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-stone-800 resize-none"
+                            value={descriptionAr}
+                            onChange={(e) => setDescriptionAr(e.target.value)}
+                        />
+                    </div>
+                </div>
                 <div className="flex gap-4">
                     <div className="flex-1">
                         <label className="block mb-1 text-sm font-medium">Price ($)</label>
@@ -410,6 +494,8 @@ interface UpdateProductProps {
         id: number;
         name: string;
         description: string;
+        nameAr?: string | null;
+        descriptionAr?: string | null;
         price: number;
         category?: { id: number; name: string };
         packSize?: number | null;
@@ -421,11 +507,13 @@ interface UpdateProductProps {
         id: number;
         name: string;
         description: string;
+        nameAr: string;
+        descriptionAr: string;
         price: number;
         categoryId: number;
         packSize: number | null;
         specs: ProductSpec[];
-        priceOptions: { label: string; price: number }[];
+        priceOptions: { label: string; labelAr: string; price: number }[];
     }) => Promise<void>;
     onCancel: () => void;
     isUpdating?: boolean;
@@ -440,6 +528,8 @@ export function UpdateProductForm({
 }: UpdateProductProps) {
     const [name, setName] = useState(product.name);
     const [description, setDescription] = useState(product.description);
+    const [nameAr, setNameAr] = useState(product.nameAr ?? '');
+    const [descriptionAr, setDescriptionAr] = useState(product.descriptionAr ?? '');
     const [price, setPrice] = useState(product.price.toString());
     const [selectedCategory, setSelectedCategory] = useState(
         product.category?.id || ""
@@ -465,7 +555,7 @@ export function UpdateProductForm({
         const cleanSpecs = specs.filter(s => s.label.trim() !== '');
         const cleanOptions = priceOptions
             .filter(o => o.label.trim() !== '' && String(o.price).trim() !== '')
-            .map(o => ({ label: o.label.trim(), price: Number(o.price) }));
+            .map(o => ({ label: o.label.trim(), labelAr: (o.labelAr ?? '').trim(), price: Number(o.price) }));
 
         if (cleanOptions.some(o => Number.isNaN(o.price))) {
             toast.error('Every sheet-count option needs a valid price.');
@@ -476,6 +566,8 @@ export function UpdateProductForm({
             id: product.id,
             name,
             description,
+            nameAr: nameAr.trim(),
+            descriptionAr: descriptionAr.trim(),
             price: parseFloat(price),
             categoryId: Number(selectedCategory),
             packSize: packSize.trim() === '' ? null : Number(packSize),
@@ -511,6 +603,28 @@ export function UpdateProductForm({
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     ></textarea>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4 p-4 rounded-md bg-stone-50 border" dir="rtl">
+                    <p className="text-xs text-gray-500">يظهر على الموقع العربي. إذا تُرك فارغاً يظهر النص الإنجليزي.</p>
+                    <div>
+                        <label className="block mb-1 text-sm font-medium">الاسم بالعربية</label>
+                        <input
+                            type="text"
+                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-stone-800"
+                            value={nameAr}
+                            onChange={(e) => setNameAr(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-1 text-sm font-medium">الوصف بالعربية</label>
+                        <textarea
+                            rows={2}
+                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-stone-800 resize-none"
+                            value={descriptionAr}
+                            onChange={(e) => setDescriptionAr(e.target.value)}
+                        />
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">

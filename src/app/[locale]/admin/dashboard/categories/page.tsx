@@ -20,6 +20,10 @@ function page() {
     const [editDescription, setEditDescription] = useState<string>('');
     const [image, setImage] = useState<File | null>(null);
     const [editImage, setEditImage] = useState<File | null>(null);
+    const [nameAr, setNameAr] = useState<string>('');
+    const [descriptionAr, setDescriptionAr] = useState<string>('');
+    const [editNameAr, setEditNameAr] = useState<string>('');
+    const [editDescriptionAr, setEditDescriptionAr] = useState<string>('');
 
     const getCategories = async () => {
         try {
@@ -33,10 +37,12 @@ function page() {
     };
 
     // Sent as multipart so the tile image can travel with the text fields.
-    const buildFormData = (values: { name: string; description: string; file: File | null }) => {
+    const buildFormData = (values: { name: string; description: string; nameAr: string; descriptionAr: string; file: File | null }) => {
         const formData = new FormData();
         formData.append('name', values.name);
         formData.append('description', values.description);
+        formData.append('nameAr', values.nameAr);
+        formData.append('descriptionAr', values.descriptionAr);
         if (values.file) formData.append('image', values.file);
         return formData;
     };
@@ -44,12 +50,14 @@ function page() {
     const handleCreation = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await axios.post('/categories', buildFormData({ name, description, file: image }), {
+            await axios.post('/categories', buildFormData({ name, description, nameAr, descriptionAr, file: image }), {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             toast.success('Category created successfully!');
             setName('');
             setDescription('');
+            setNameAr('');
+            setDescriptionAr('');
             setImage(null);
             setShowForm(false);
             await getCategories();
@@ -64,7 +72,7 @@ function page() {
         try {
             await axios.patch(
                 `/categories/${id}`,
-                buildFormData({ name: editName, description: editDescription, file: editImage }),
+                buildFormData({ name: editName, description: editDescription, nameAr: editNameAr, descriptionAr: editDescriptionAr, file: editImage }),
                 { headers: { 'Content-Type': 'multipart/form-data' } },
             );
             toast.success('Category updated');
@@ -112,6 +120,10 @@ function page() {
                     setName={setName}
                     description={description}
                     setDescription={setDescription}
+                    nameAr={nameAr}
+                    setNameAr={setNameAr}
+                    descriptionAr={descriptionAr}
+                    setDescriptionAr={setDescriptionAr}
                     image={image}
                     setImage={setImage}
                     handleCreation={handleCreation}
@@ -133,7 +145,7 @@ function page() {
                             <React.Fragment key={cat.id}>
                                 <tr className="bg-white border w-full shadow-sm">
                                     <td className='p-4'>{cat.image?.url ? <img src={cat.image.url} alt={cat.name} className='w-16 h-12 object-cover rounded' /> : <span className='text-xs text-gray-400'>none</span>}</td>
-                                    <td>{cat.name}</td>
+                                    <td>{cat.name}{cat.nameAr ? <span className='block text-xs text-gray-500' dir='rtl'>{cat.nameAr}</span> : null}</td>
                                     <td>{cat.description || '. . . . . . . . .'}</td>
                                     <td>
                                         <div className="flex items-center gap-3 text-2xl text-stone-700">
@@ -142,6 +154,8 @@ function page() {
                                                     setEditingCategoryId(cat.id);
                                                     setEditName(cat.name);
                                                     setEditDescription(cat.description || '');
+                                                    setEditNameAr(cat.nameAr || '');
+                                                    setEditDescriptionAr(cat.descriptionAr || '');
                                                     setEditImage(null);
                                                 }}
                                                 className="cursor-pointer mx-2 hover:text-green-600 transition-colors"
@@ -163,6 +177,10 @@ function page() {
                                                 setEditName={setEditName}
                                                 editDescription={editDescription}
                                                 setEditDescription={setEditDescription}
+                                                editNameAr={editNameAr}
+                                                setEditNameAr={setEditNameAr}
+                                                editDescriptionAr={editDescriptionAr}
+                                                setEditDescriptionAr={setEditDescriptionAr}
                                                 editImage={editImage}
                                                 setEditImage={setEditImage}
                                                 setEditingCategoryId={setEditingCategoryId}

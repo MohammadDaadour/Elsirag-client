@@ -16,6 +16,8 @@ function page() {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [nameAr, setNameAr] = useState('');
+  const [descriptionAr, setDescriptionAr] = useState('');
   const [price, setPrice] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<any>();
   const [images, setImages] = useState<File[]>([]);
@@ -51,6 +53,8 @@ function page() {
       })
       setName('');
       setDescription('');
+      setNameAr('');
+      setDescriptionAr('');
       setPrice('');
       setSelectedCategory(null);
       setImages([]);
@@ -71,6 +75,8 @@ function page() {
       const formData = new FormData();
       formData.append('name', name);
       formData.append('description', description);
+      formData.append('nameAr', nameAr);
+      formData.append('descriptionAr', descriptionAr);
       formData.append('price', price.toString());
       // Ensure selectedCategory is set
       if (!selectedCategory || !selectedCategory.id) {
@@ -97,11 +103,13 @@ function page() {
     id: number;
     name: string;
     description: string;
+    nameAr: string;
+    descriptionAr: string;
     price: number;
     categoryId: number;
     packSize: number | null;
     specs: { label: string; value: string }[];
-    priceOptions: { label: string; price: number }[];
+    priceOptions: { label: string; labelAr: string; price: number }[];
   }) => {
     try {
       setLoading(true);
@@ -109,6 +117,8 @@ function page() {
       await axios.patch(`/products/${updatedData.id}`, {
         name: updatedData.name,
         description: updatedData.description,
+        nameAr: updatedData.nameAr,
+        descriptionAr: updatedData.descriptionAr,
         price: updatedData.price,
         categoryId: updatedData.categoryId,
         packSize: updatedData.packSize,
@@ -210,6 +220,10 @@ function page() {
           setName={setName}
           description={description}
           setDescription={setDescription}
+          nameAr={nameAr}
+          setNameAr={setNameAr}
+          descriptionAr={descriptionAr}
+          setDescriptionAr={setDescriptionAr}
           price={price}
           setPrice={setPrice}
           selectedCategory={selectedCategory}

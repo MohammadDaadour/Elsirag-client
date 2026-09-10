@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import axios from '@/lib/axios';
 import RelatedProducts from '@/components/RelatedProducts';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import { pickLocale } from '@/lib/localized';
 import { PiWhatsappLogoThin } from 'react-icons/pi';
 import { buildWhatsAppUrl, whatsappMessages } from '@/lib/whatsapp';
 import { Product } from '@/types/product';
@@ -13,6 +14,7 @@ import { Product } from '@/types/product';
 export default function ProductPage() {
     const { id } = useParams();
     const t = useTranslations('ProductPage');
+    const locale = useLocale();
     const [product, setProduct] = useState<Product | null>(null);
     const [currentImg, setCurrentImg] = useState('');
 
@@ -37,7 +39,12 @@ export default function ProductPage() {
     const specs = product.specs ?? [];
     const priceOptions = product.priceOptions ?? [];
 
-    const enquiryUrl = () => buildWhatsAppUrl(whatsappMessages.product(product.name));
+    const name = pickLocale(locale, product.name, product.nameAr);
+    const description = pickLocale(locale, product.description, product.descriptionAr);
+    const categoryName = pickLocale(locale, product.category?.name ?? '', product.category?.nameAr);
+
+    // The message is always Arabic, so prefer the Arabic product name in it.
+    const enquiryUrl = () => buildWhatsAppUrl(whatsappMessages.product(product.nameAr?.trim() || product.name));
 
     const formatPrice = (price: number | string) => Number(price ?? 0).toFixed(2);
 
@@ -50,7 +57,7 @@ export default function ProductPage() {
                     <div className="relative aspect-square overflow-hidden rounded-2xl shadow-lg">
                         <img
                             src={currentImg || '/placeholder.png'}
-                            alt={product.name}
+                            alt={name}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                     </div>
@@ -71,10 +78,10 @@ export default function ProductPage() {
                 <div className="flex flex-col">
                     <div className="mb-6">
                         <span className="inline-block px-3 py-1 text-xs font-semibold text-rose-600 bg-rose-50 rounded-full mb-4">
-                            {product.category?.name || t('featured')}
+                            {categoryName || t('featured')}
                         </span>
-                        <h1 className="text-4xl font-bold text-gray-900 mb-4">{product.name}</h1>
-                        <p className="text-lg text-gray-600 leading-relaxed">{product.description}</p>
+                        <h1 className="text-4xl font-bold text-gray-900 mb-4">{name}</h1>
+                        <p className="text-lg text-gray-600 leading-relaxed">{description}</p>
 
                         {product.packSize ? (
                             <p className="mt-4 inline-block px-3 py-1 text-sm font-medium text-stone-700 bg-stone-100 rounded-full">
@@ -95,7 +102,7 @@ export default function ProductPage() {
                                 <tbody>
                                     {priceOptions.map((option, index) => (
                                         <tr key={index} className="border-b last:border-b-0">
-                                            <td className="py-3 font-medium text-gray-900">{option.label}</td>
+                                            <td className="py-3 font-medium text-gray-900">{pickLocale(locale, option.label, option.labelAr)}</td>
                                             <td className="py-3 text-rose-600 font-semibold whitespace-nowrap text-right">
                                                 {formatPrice(option.price)} {t('currency')}
                                             </td>

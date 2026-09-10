@@ -9,11 +9,13 @@ import Link from 'next/link';
 import { useDebounce } from '@/hooks/useDebounce';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import { pickLocale } from '@/lib/localized';
 
 export const SearchHandler = () => {
     const router = useRouter();
     const t = useTranslations('Search')
+    const locale = useLocale();
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState<Product[]>([]);
     const [loading, setLoading] = useState(false);
@@ -114,7 +116,7 @@ export const SearchHandler = () => {
                                             <div>
                                                 <Image
                                                     src={product.images[0].url}
-                                                    alt={product.name}
+                                                    alt={pickLocale(locale, product.name, product.nameAr)}
                                                     width={60}
                                                     height={30}
                                                     className=""
@@ -128,7 +130,7 @@ export const SearchHandler = () => {
                                             </div>
                                         )}
                                         <div>
-                                            <div className="font-medium text-stone-800">{product.name}</div>
+                                            <div className="font-medium text-stone-800">{pickLocale(locale, product.name, product.nameAr)}</div>
                                             <div className="text-sm text-gray-600 truncate">
                                                 {product.description}
                                             </div>
@@ -154,6 +156,7 @@ export const SearchHandler = () => {
 
 export const SearchHandlerMob = () => {
     const t = useTranslations('Search');
+    const locale = useLocale();
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState<Product[]>([]);
@@ -248,7 +251,7 @@ export const SearchHandlerMob = () => {
                                             <div>
                                                 <Image
                                                     src={product.images[0].url}
-                                                    alt={product.name}
+                                                    alt={pickLocale(locale, product.name, product.nameAr)}
                                                     width={60}
                                                     height={30}
                                                     className=""
@@ -262,7 +265,7 @@ export const SearchHandlerMob = () => {
                                             </div>
                                         )}
                                         <div>
-                                            <div className="font-medium text-stone-800">{product.name}</div>
+                                            <div className="font-medium text-stone-800">{pickLocale(locale, product.name, product.nameAr)}</div>
                                             <div className="text-sm text-gray-600 truncate">
                                                 {product.description}
                                             </div>

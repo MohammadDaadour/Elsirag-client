@@ -12,6 +12,7 @@ export interface ProductSpec {
 /** A sheet-count and its wholesale price, e.g. { label: "60 sheets", price: 45 }. */
 export interface ProductPriceOption {
   label: string;
+  labelAr?: string | null;
   price: number | string;
 }
 
@@ -39,6 +40,8 @@ export interface Product {
   id: number;
   name: string;
   description: string;
+  nameAr?: string | null;
+  descriptionAr?: string | null;
   price: number;
   stock: number;
   images: Img[];
@@ -46,6 +49,7 @@ export interface Product {
   category: {
     id: number;
     name: string;
+    nameAr?: string | null;
   };
   packSize?: number | null;
   specs?: ProductSpec[] | null;

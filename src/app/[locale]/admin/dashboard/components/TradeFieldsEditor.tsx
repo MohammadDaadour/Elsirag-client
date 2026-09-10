@@ -109,7 +109,7 @@ export default function TradeFieldsEditor({
                     <label className="text-sm font-medium">Sheet counts and prices</label>
                     <button
                         type="button"
-                        onClick={() => setPriceOptions([...priceOptions, { label: '', price: '' }])}
+                        onClick={() => setPriceOptions([...priceOptions, { label: '', labelAr: '', price: '' }])}
                         disabled={disabled}
                         className="text-sm text-rose-600 hover:text-rose-700 cursor-pointer disabled:opacity-50"
                     >
@@ -134,6 +134,15 @@ export default function TradeFieldsEditor({
                                     disabled={disabled}
                                 />
                                 <input
+                                    type="text"
+                                    dir="rtl"
+                                    className={inputClass}
+                                    placeholder="٦٠ ورقة"
+                                    value={row.labelAr ?? ''}
+                                    onChange={(e) => updateOption(index, { labelAr: e.target.value })}
+                                    disabled={disabled}
+                                />
+                                <input
                                     type="number"
                                     min={0}
                                     step="0.01"
@@ -154,7 +163,7 @@ export default function TradeFieldsEditor({
                                 </button>
                             </div>
                         ))}
-                        <p className="text-xs text-gray-500">Wholesale price per unit, in EGP.</p>
+                        <p className="text-xs text-gray-500">English label · Arabic label · wholesale price per unit in EGP. Arabic falls back to English if empty.</p>
                     </div>
                 )}
             </div>

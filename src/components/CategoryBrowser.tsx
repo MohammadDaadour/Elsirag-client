@@ -7,7 +7,8 @@ import Header from '@/components/Header';
 import ProductCard from '@/components/ProductCard';
 import { Product } from '@/types/product';
 import { Category } from '@/types/category';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import { pickLocale } from '@/lib/localized';
 import { ClipLoader } from 'react-spinners';
 import { CiSearch, CiGrid41 } from 'react-icons/ci';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -21,6 +22,7 @@ const PAGE_SIZE = 12;
  */
 export default function CategoryBrowser({ categoryId }: { categoryId: number | null }) {
     const t = useTranslations('CataloguePage');
+    const locale = useLocale();
 
     const [categories, setCategories] = useState<Category[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -74,11 +76,12 @@ export default function CategoryBrowser({ categoryId }: { categoryId: number | n
     };
 
     const current = categories.find(c => c.id === categoryId) ?? null;
-    const heading = current?.name ?? t('allProducts');
+    const heading = current ? pickLocale(locale, current.name, current.nameAr) : t('allProducts');
+    const currentDescription = current ? pickLocale(locale, current.description ?? '', current.descriptionAr) : '';
 
     const navItems = [
         { id: null as number | null, name: t('allProducts'), href: '/catalogue/all' },
-        ...categories.map(c => ({ id: c.id as number | null, name: c.name, href: `/catalogue/${c.id}` })),
+        ...categories.map(c => ({ id: c.id as number | null, name: pickLocale(locale, c.name, c.nameAr), href: `/catalogue/${c.id}` })),
     ];
 
     return (
@@ -95,7 +98,7 @@ export default function CategoryBrowser({ categoryId }: { categoryId: number | n
                 </Link>
 
                 <h1 className="text-3xl font-bold text-gray-900 mb-1">{heading}</h1>
-                {current?.description && <p className="text-gray-600 mb-6">{current.description}</p>}
+                {currentDescription && <p className="text-gray-600 mb-6">{currentDescription}</p>}
 
                 {/* Mobile: horizontally scrolling chips */}
                 <div className="lg:hidden -mx-4 px-4 mb-6 overflow-x-auto">

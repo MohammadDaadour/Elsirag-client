@@ -5,7 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import axios from '@/lib/axios';
 import { Category } from '@/types/category';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import { pickLocale } from '@/lib/localized';
 import { ClipLoader } from 'react-spinners';
 import { CiGrid41 } from 'react-icons/ci';
 
@@ -15,6 +16,7 @@ import { CiGrid41 } from 'react-icons/ci';
  */
 export default function CategoryTiles({ showAllTile = false }: { showAllTile?: boolean }) {
     const t = useTranslations('CataloguePage');
+    const locale = useLocale();
     const [categories, setCategories] = useState<Category[] | null>(null);
 
     useEffect(() => {
@@ -47,7 +49,7 @@ export default function CategoryTiles({ showAllTile = false }: { showAllTile?: b
                         {category.image?.url ? (
                             <Image
                                 src={category.image.url}
-                                alt={category.name}
+                                alt={pickLocale(locale, category.name, category.nameAr)}
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                             />
@@ -58,10 +60,10 @@ export default function CategoryTiles({ showAllTile = false }: { showAllTile?: b
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                         <div className="absolute bottom-0 inset-x-0 p-5">
-                            <h3 className="text-xl font-semibold text-white">{category.name}</h3>
+                            <h3 className="text-xl font-semibold text-white">{pickLocale(locale, category.name, category.nameAr)}</h3>
                             {category.description && (
                                 <p className="text-sm text-white/80 line-clamp-1 mt-1">
-                                    {category.description}
+                                    {pickLocale(locale, category.description, category.descriptionAr)}
                                 </p>
                             )}
                         </div>

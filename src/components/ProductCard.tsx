@@ -3,10 +3,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Product, displayPrice } from '@/types/product';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import { pickLocale } from '@/lib/localized';
 
 export default function ProductCard({ product }: { product: Product }) {
     const t = useTranslations('ProductCard');
+    const locale = useLocale();
+    const name = pickLocale(locale, product.name, product.nameAr);
+    const categoryName = pickLocale(locale, product.category?.name ?? '', product.category?.nameAr);
 
     const { amount, from } = displayPrice(product);
 
@@ -26,7 +30,7 @@ export default function ProductCard({ product }: { product: Product }) {
                             {product.images?.[0]?.url ? (
                                 <Image
                                     src={product.images[0].url}
-                                    alt={product.name}
+                                    alt={name}
                                     fill
                                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                                 />
@@ -42,7 +46,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
                     <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full shadow-sm">
                         <span className="text-xs font-medium text-gray-700">
-                            {product.category?.name}
+                            {categoryName}
                         </span>
                     </div>
                 </div>
@@ -50,7 +54,7 @@ export default function ProductCard({ product }: { product: Product }) {
                 <div className="p-4">
                     <Link href={`/product/${product.id}`}>
                         <h3 className="font-semibold text-gray-900 line-clamp-2 mb-2 group-hover:text-rose-600 transition-colors">
-                            {product.name}
+                            {name}
                         </h3>
                     </Link>
 
