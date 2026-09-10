@@ -13,9 +13,9 @@ export default function ContactPage() {
     const t = useTranslations('ContactPage');
 
     const details = [
-        { icon: <PiPhoneThin className="text-2xl" />, title: t('phoneTitle'), value: t('phoneValue') },
-        { icon: <PiMapPinThin className="text-2xl" />, title: t('addressTitle'), value: t('addressValue') },
-        { icon: <PiClockThin className="text-2xl" />, title: t('hoursTitle'), value: t('hoursValue') },
+        { icon: <PiPhoneThin className="text-2xl" />, title: t('phoneTitle'), value: t('phoneValue'), href: 'tel:' + t('phoneValue').split(' ').join('') },
+        { icon: <PiMapPinThin className="text-2xl" />, title: t('addressTitle'), value: t('addressValue'), href: undefined },
+        { icon: <PiClockThin className="text-2xl" />, title: t('hoursTitle'), value: t('hoursValue'), href: undefined },
     ];
 
     return (
@@ -49,7 +49,13 @@ export default function ContactPage() {
                         <div key={detail.title} className="p-5 bg-white rounded-2xl shadow-sm border border-gray-100">
                             <span className="text-rose-600">{detail.icon}</span>
                             <h2 className="mt-3 text-sm font-semibold text-gray-900">{detail.title}</h2>
-                            <p className="mt-1 text-sm text-gray-600 leading-relaxed">{detail.value}</p>
+                            {detail.href ? (
+                                <a href={detail.href} className="mt-1 block text-sm text-gray-600 hover:text-rose-600 transition-colors leading-relaxed" dir="ltr">
+                                    {detail.value}
+                                </a>
+                            ) : (
+                                <p className="mt-1 text-sm text-gray-600 leading-relaxed">{detail.value}</p>
+                            )}
                         </div>
                     ))}
                 </div>

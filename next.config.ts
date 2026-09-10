@@ -33,6 +33,18 @@ const nextConfig: NextConfig = {
         destination: '/catalogue',
         permanent: true,
       })),
+      // About is written but still has gaps, so it is unlinked and unreachable
+      // for now. Delete these two entries to bring it back.
+      {
+        source: '/:locale(en|ar)/about',
+        destination: '/:locale',
+        permanent: false,
+      },
+      {
+        source: '/about',
+        destination: '/',
+        permanent: false,
+      },
       // Category pages moved under the catalogue and keep their id.
       {
         source: '/:locale(en|ar)/category/:id',

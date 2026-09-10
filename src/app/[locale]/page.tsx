@@ -42,13 +42,7 @@ export default function Homepage() {
       <section className="px-4 py-16 bg-white">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('aboutTitle')}</h2>
-          <p className="text-lg text-gray-600 leading-relaxed mb-6">{t('aboutBody')}</p>
-          <Link
-            href="/about"
-            className="inline-block px-6 py-3 rounded-xl border border-rose-600 text-rose-600 hover:bg-rose-600 hover:text-white transition-colors"
-          >
-            {t('aboutLink')}
-          </Link>
+          <p className="text-lg text-gray-600 leading-relaxed">{t('aboutBody')}</p>
         </div>
       </section>
 

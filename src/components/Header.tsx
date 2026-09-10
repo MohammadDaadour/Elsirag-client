@@ -60,9 +60,6 @@ export default function Header() {
                         <Link href={'/catalogue'}>
                             <div className='hover:text-black cursor-pointer p-6 px-3'>{t('catalogue')}</div>
                         </Link>
-                        <Link href={'/about'}>
-                            <div className='hover:text-black cursor-pointer p-6 px-3'>{t('about')}</div>
-                        </Link>
                         <Link href={'/contact'}>
                             <div className='hover:text-black cursor-pointer p-6 px-3'>{t('contact')}</div>
                         </Link>
@@ -178,12 +175,6 @@ export default function Header() {
                                 <Link href={'/catalogue'} onClick={closeNav}>
                                     <div className='text-gray-600 hover:text-black cursor-pointer py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors'>
                                         {t('catalogue')}
-                                    </div>
-                                </Link>
-
-                                <Link href={'/about'} onClick={closeNav}>
-                                    <div className='text-gray-600 hover:text-black cursor-pointer py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors'>
-                                        {t('about')}
                                     </div>
                                 </Link>
 
