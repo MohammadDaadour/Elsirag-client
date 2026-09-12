@@ -7,7 +7,7 @@ import { ClipLoader } from 'react-spinners';
 import { CiEdit, CiTrash, CiImageOn } from "react-icons/ci";
 import { showConfirm, CreateProductForm } from '../components/Forms';
 import { UpdateProductForm, UpdateProductImagesForm } from '../components/Forms';
-import { Product } from '@/types/product';
+import { Product, ProductSpec, ProductPriceOption } from '@/types/product';
 
 function page() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -21,6 +21,9 @@ function page() {
   const [price, setPrice] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<any>();
   const [images, setImages] = useState<File[]>([]);
+  const [packSize, setPackSize] = useState('');
+  const [specs, setSpecs] = useState<ProductSpec[]>([]);
+  const [priceOptions, setPriceOptions] = useState<ProductPriceOption[]>([]);
   const [editingProductId, setEditingProductId] = useState<number>(0);
   const [editingProductImageId, setEditingProductImageId] = useState<number>(0);
   const [editName, setEditName] = useState<string>('');
@@ -58,12 +61,16 @@ function page() {
       setPrice('');
       setSelectedCategory(null);
       setImages([]);
+      setPackSize('');
+      setSpecs([]);
+      setPriceOptions([]);
       setShowForm(false);
       toast.success('Product created successfully!');
       await getProducts();
     } catch (err: any) {
-      console.log('error: ', err.response.data);
-      toast.error('Failed to create Product.');
+      console.log('error: ', err.response?.data);
+      const msg = err.response?.data?.message;
+      toast.error(Array.isArray(msg) ? msg.join(', ') : (msg || 'Failed to create product.'));
     }
   }
 
@@ -85,6 +92,20 @@ function page() {
       }
 
       formData.append('categoryId', selectedCategory.id.toString());
+
+      // Trade detail rides along as JSON strings; the API parses them back.
+      // Blank rows are dropped so an untouched editor sends nothing.
+      const cleanSpecs = specs.filter(s => s.label.trim() !== '');
+      const cleanOptions = priceOptions
+        .filter(o => o.label.trim() !== '' && String(o.price).trim() !== '')
+        .map(o => ({ label: o.label.trim(), labelAr: (o.labelAr ?? '').trim(), price: Number(o.price) }));
+      if (cleanOptions.some(o => Number.isNaN(o.price))) {
+        toast.error('Every sheet-count price must be a number.');
+        return;
+      }
+      if (packSize.trim() !== '') formData.append('packSize', packSize.trim());
+      if (cleanSpecs.length > 0) formData.append('specs', JSON.stringify(cleanSpecs));
+      if (cleanOptions.length > 0) formData.append('priceOptions', JSON.stringify(cleanOptions));
 
       images.forEach((image) => {
         formData.append('images', image);
@@ -161,7 +182,8 @@ function page() {
       toast.success('Product images updated successfully!');
     } catch (err) {
       console.error('Update images error:', err);
-      toast.error('Failed to update product images');
+      const msg = (err as any)?.response?.data?.message;
+      toast.error(Array.isArray(msg) ? msg.join(', ') : (msg || 'Failed to update product images'));
     } finally {
       setLoading(false);
     }
@@ -230,6 +252,12 @@ function page() {
           setSelectedCategory={setSelectedCategory}
           images={images}
           setImages={setImages}
+          packSize={packSize}
+          setPackSize={setPackSize}
+          specs={specs}
+          setSpecs={setSpecs}
+          priceOptions={priceOptions}
+          setPriceOptions={setPriceOptions}
           categories={categories}
           isCreating={loading}
         />

@@ -271,6 +271,12 @@ interface CreateProductProps {
     setSelectedCategory: (category: Category | null) => void;
     images: File[];
     setImages: (images: File[]) => void;
+    packSize: string;
+    setPackSize: (value: string) => void;
+    specs: ProductSpec[];
+    setSpecs: (value: ProductSpec[]) => void;
+    priceOptions: ProductPriceOption[];
+    setPriceOptions: (value: ProductPriceOption[]) => void;
     isCreating: boolean;
 }
 
@@ -291,6 +297,12 @@ export function CreateProductForm({
     setSelectedCategory,
     images,
     setImages,
+    packSize,
+    setPackSize,
+    specs,
+    setSpecs,
+    priceOptions,
+    setPriceOptions,
     isCreating
 }: CreateProductProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -442,6 +454,16 @@ export function CreateProductForm({
                         </div>
                     )}
                 </div>
+                <TradeFieldsEditor
+                    packSize={packSize}
+                    setPackSize={setPackSize}
+                    specs={specs}
+                    setSpecs={setSpecs}
+                    priceOptions={priceOptions}
+                    setPriceOptions={setPriceOptions}
+                    disabled={isCreating}
+                />
+
                 <div>
                     <label className="block mb-1 text-sm font-medium">Images *</label>
                     <input
