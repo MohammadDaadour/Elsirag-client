@@ -92,18 +92,18 @@ export default function ProductPage() {
 
                     {priceOptions.length > 0 ? (
                         <div className="mb-8">
-                            <table className="w-full text-left border-collapse">
+                            <table className="w-full text-start border-collapse">
                                 <thead>
                                     <tr className="text-xs uppercase tracking-wide text-gray-500 border-b">
-                                        <th className="py-2 font-medium">{t('optionColumn')}</th>
-                                        <th className="py-2 font-medium text-right">{t('priceColumn')}</th>
+                                        <th className="py-2 pe-6 font-medium">{t('optionColumn')}</th>
+                                        <th className="py-2 font-medium text-end">{t('priceColumn')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {priceOptions.map((option, index) => (
                                         <tr key={index} className="border-b last:border-b-0">
-                                            <td className="py-3 font-medium text-gray-900">{pickLocale(locale, option.label, option.labelAr)}</td>
-                                            <td className="py-3 text-rose-600 font-semibold whitespace-nowrap text-right">
+                                            <td className="py-3 pe-6 font-medium text-gray-900">{pickLocale(locale, option.label, option.labelAr)}</td>
+                                            <td className="py-3 text-rose-600 font-semibold whitespace-nowrap text-end">
                                                 {formatPrice(option.price)} {t('currency')}
                                             </td>
                                         </tr>
@@ -129,7 +129,7 @@ export default function ProductPage() {
                                 {specs.map((spec, index) => (
                                     <div key={index} className="flex justify-between gap-4 py-2.5">
                                         <dt className="text-gray-500">{spec.label}</dt>
-                                        <dd className="text-gray-900 font-medium text-right">{spec.value}</dd>
+                                        <dd className="text-gray-900 font-medium text-end">{spec.value}</dd>
                                     </div>
                                 ))}
                             </dl>
