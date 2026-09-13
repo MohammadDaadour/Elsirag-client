@@ -1,4 +1,4 @@
-import notebooks from '../assets/notebooks-removebg-preview.png';
+import notebooks from '../assets/hero-notebooks.png';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 
@@ -9,7 +9,7 @@ export default function Slogan() {
     return (
         <div className='flex flex-wrap justify-center bg-white sm:h-screen'>
             <div className='flex justify-center items-center'>
-                <img className='xl:mt-0 mt-[100px] max-w-[350px] sm:max-w-[600px] ' src={notebooks.src} alt="" />
+                <img className='xl:mt-0 mt-[100px] max-w-[350px] sm:max-w-[600px] ' src={notebooks.src} alt="Elsirag notebooks" />
             </div>
             <div
                 className="p-8 flex flex-col items-center justify-center bg-cover bg-center relative"
