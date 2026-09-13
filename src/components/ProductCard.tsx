@@ -60,12 +60,18 @@ export default function ProductCard({ product }: { product: Product }) {
 
                     <div className="flex items-center justify-between flex-wrap">
                         <div>
-                            <span className="text-lg font-bold text-gray-900">
-                                {from ? `${t('from')} ` : ''}{formatPrice(amount)}
-                            </span>
-                            <span className="block text-xs text-gray-500 mt-1">
-                                {t('wholesalePrice')}
-                            </span>
+                            {amount === null ? (
+                                <span className="text-sm font-medium text-gray-600">{t('priceOnRequest')}</span>
+                            ) : (
+                                <>
+                                    <span className="text-lg font-bold text-gray-900">
+                                        {from ? `${t('from')} ` : ''}{formatPrice(amount)}
+                                    </span>
+                                    <span className="block text-xs text-gray-500 mt-1">
+                                        {t('wholesalePrice')}
+                                    </span>
+                                </>
+                            )}
                         </div>
 
                         <Link

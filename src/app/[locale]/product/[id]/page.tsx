@@ -111,13 +111,15 @@ export default function ProductPage() {
                                 </tbody>
                             </table>
                         </div>
-                    ) : (
+                    ) : product.price != null ? (
                         <div className="mb-8 flex items-baseline gap-3">
                             <p className="text-3xl font-bold text-rose-600">
                                 {formatPrice(product.price)} {t('currency')}
                             </p>
                             <span className="text-sm text-gray-500">{t('wholesalePrice')}</span>
                         </div>
+                    ) : (
+                        <p className="mb-8 text-lg font-medium text-gray-600">{t('priceOnRequest')}</p>
                     )}
 
                     {specs.length > 0 && (

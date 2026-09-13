@@ -100,11 +100,13 @@
     "perCarton": "{count} per carton",
     "optionColumn": "Option",
     "priceColumn": "Wholesale price",
-    "askOnWhatsApp": "Ask about this product on WhatsApp"
+    "askOnWhatsApp": "Ask about this product on WhatsApp",
+    "priceOnRequest": "Price on request"
   },
   "ProductCard": {
     "wholesalePrice": "Wholesale price",
     "from": "From",
+    "priceOnRequest": "Price on request",
     "view": "View"
   },
   "HomePage": {

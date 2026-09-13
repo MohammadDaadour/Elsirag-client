@@ -100,11 +100,13 @@
     "perCarton": "{count} في الكرتونة",
     "optionColumn": "المقاس",
     "priceColumn": "سعر الجملة",
-    "askOnWhatsApp": "اسأل عن هذا المنتج على واتساب"
+    "askOnWhatsApp": "اسأل عن هذا المنتج على واتساب",
+    "priceOnRequest": "السعر عند الطلب"
   },
   "ProductCard": {
     "wholesalePrice": "سعر الجملة",
     "from": "يبدأ من",
+    "priceOnRequest": "السعر عند الطلب",
     "view": "عرض المنتج",
     "currency": "ج.م"
   },

@@ -84,7 +84,7 @@ function page() {
       formData.append('description', description);
       formData.append('nameAr', nameAr);
       formData.append('descriptionAr', descriptionAr);
-      formData.append('price', price.toString());
+      if (price.trim() !== '') formData.append('price', price.trim());
       // Ensure selectedCategory is set
       if (!selectedCategory || !selectedCategory.id) {
         toast.error('Please select a valid category.');
@@ -126,7 +126,7 @@ function page() {
     description: string;
     nameAr: string;
     descriptionAr: string;
-    price: number;
+    price: number | null;
     categoryId: number;
     packSize: number | null;
     specs: { label: string; value: string }[];

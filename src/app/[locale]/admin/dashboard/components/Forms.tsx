@@ -354,7 +354,7 @@ export function CreateProductForm({
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!name || !description || !price || !categories) {
+        if (!name || !description || !categories) {
             alert('Please fill in all required fields');
             return;
         }
@@ -416,7 +416,8 @@ export function CreateProductForm({
                 </div>
                 <div className="flex gap-4">
                     <div className="flex-1">
-                        <label className="block mb-1 text-sm font-medium">Price ($)</label>
+                        <label className="block mb-1 text-sm font-medium">Base price (EGP)</label>
+                        <p className="text-xs text-gray-500 mb-1">Leave empty if the product is priced by sheet count below.</p>
                         <input
                             type="number"
                             min="0"
@@ -425,7 +426,6 @@ export function CreateProductForm({
                             placeholder="0.00"
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
-                            required
                         />
                     </div>
                 </div>
@@ -531,7 +531,7 @@ interface UpdateProductProps {
         description: string;
         nameAr: string;
         descriptionAr: string;
-        price: number;
+        price: number | null;
         categoryId: number;
         packSize: number | null;
         specs: ProductSpec[];
@@ -552,7 +552,8 @@ export function UpdateProductForm({
     const [description, setDescription] = useState(product.description);
     const [nameAr, setNameAr] = useState(product.nameAr ?? '');
     const [descriptionAr, setDescriptionAr] = useState(product.descriptionAr ?? '');
-    const [price, setPrice] = useState(product.price.toString());
+    // Base price is optional: products priced only by sheet count have none.
+    const [price, setPrice] = useState(product.price != null ? String(product.price) : '');
     const [selectedCategory, setSelectedCategory] = useState(
         product.category?.id || ""
     );
@@ -590,7 +591,7 @@ export function UpdateProductForm({
             description,
             nameAr: nameAr.trim(),
             descriptionAr: descriptionAr.trim(),
-            price: parseFloat(price),
+            price: price.trim() === '' ? null : parseFloat(price),
             categoryId: Number(selectedCategory),
             packSize: packSize.trim() === '' ? null : Number(packSize),
             specs: cleanSpecs,
@@ -651,7 +652,8 @@ export function UpdateProductForm({
 
                 <div className="grid grid-cols-2 gap-4">
                     <div>
-                        <label className="block mb-1 text-sm font-medium">Price</label>
+                        <label className="block mb-1 text-sm font-medium">Base price (EGP)</label>
+                        <p className="text-xs text-gray-500 mb-1">Leave empty if the product is priced by sheet count below.</p>
                         <input
                             type="number"
                             min="0"

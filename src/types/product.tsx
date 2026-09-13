@@ -24,7 +24,7 @@ export interface ProductPriceOption {
 export function displayPrice(product: {
   price?: number | string;
   priceOptions?: ProductPriceOption[] | null;
-}): { amount: number; from: boolean } {
+}): { amount: number | null; from: boolean } {
   const options = (product?.priceOptions ?? [])
     .map(o => Number(o.price))
     .filter(n => Number.isFinite(n));
@@ -33,7 +33,9 @@ export function displayPrice(product: {
     return { amount: Math.min(...options), from: options.length > 1 };
   }
 
-  return { amount: Number(product?.price ?? 0), from: false };
+  // No sheet-count prices and no base price: the card shows "price on request".
+  const base = Number(product?.price);
+  return { amount: product?.price != null && Number.isFinite(base) ? base : null, from: false };
 }
 
 export interface Product {
