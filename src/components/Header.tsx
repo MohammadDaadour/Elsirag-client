@@ -10,7 +10,7 @@ import { SearchHandler, SearchHandlerMob } from './SearchHandler';
 import HoverMenu from './HoverMenu';
 import { useUser } from '@/context/UserContext';
 import { useTranslations } from 'next-intl';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname } from '@/i18n/navigation';
 import { useLocale } from 'next-intl';
 
 export default function Header() {
@@ -29,16 +29,12 @@ export default function Header() {
         setIsNavOpen(false);
     }
 
+    // next-intl's router knows the prefix rules (Arabic is unprefixed, English
+    // is /en) and sets the locale cookie, so the switch sticks.
     const switchLocale = (newLocale: 'en' | 'ar') => {
-    if (newLocale === currentLocale) return;
-
-    // Remove current locale from pathname and add new one
-    const pathWithoutLocale = pathname.replace(`/${currentLocale}`, '') || '/';
-    const newPath = `/${newLocale}${pathWithoutLocale}`;
-    
-    router.push(newPath);
-    router.refresh();
-  };
+        if (newLocale === currentLocale) return;
+        router.replace(pathname, { locale: newLocale });
+    };
 
     if (loading) {
         return (
