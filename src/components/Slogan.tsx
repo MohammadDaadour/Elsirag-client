@@ -1,5 +1,5 @@
 import notebooks from '../assets/notebooks-removebg-preview.png';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 
 export default function Slogan() {

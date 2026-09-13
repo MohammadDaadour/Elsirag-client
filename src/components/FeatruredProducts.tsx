@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import axios from '@/lib/axios';
 import { Img, FeaturedProductsProps, Product, PaginatedResponse, ProductQueryDto } from '@/types/product';
 import ProductCard from './ProductCard';

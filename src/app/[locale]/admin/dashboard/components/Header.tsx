@@ -3,7 +3,7 @@ import Image from 'next/image';
 import elsirag_logo from '../../../../../assets/elsirag_logo.png'
 import { PiShieldThin, PiListThin } from "react-icons/pi";
 import { RxHamburgerMenu } from "react-icons/rx";
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 
 interface HeaderProps {
     toggleNav: () => void;

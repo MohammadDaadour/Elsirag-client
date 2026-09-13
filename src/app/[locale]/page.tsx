@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Slogan from '@/components/Slogan';
 import FeaturedProducts from '@/components/FeatruredProducts';
 import CategoryTiles from '@/components/CategoryTiles';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { PiWhatsappLogoThin } from 'react-icons/pi';
 import { buildWhatsAppUrl, whatsappMessages } from '@/lib/whatsapp';

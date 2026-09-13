@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import axios from "@/lib/axios";
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import toast from 'react-hot-toast';
 import { useUser } from '@/context/UserContext';
 import { useTranslations } from 'next-intl';

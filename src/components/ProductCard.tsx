@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { Product, displayPrice } from '@/types/product';
 import { useTranslations, useLocale } from 'next-intl';
 import { pickLocale } from '@/lib/localized';

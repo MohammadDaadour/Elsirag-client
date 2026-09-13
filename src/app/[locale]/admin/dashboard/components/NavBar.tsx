@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { IoAnalytics } from 'react-icons/io5';
 import { PiUsersThreeThin, PiNotebookThin } from 'react-icons/pi';
 import { CiBoxList } from 'react-icons/ci';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 
 const links = [
   // { href: '/admin/dashboard', label: 'Analytics', icon: <IoAnalytics className='text-2xl' /> },

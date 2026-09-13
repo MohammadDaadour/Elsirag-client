@@ -5,10 +5,10 @@ import { CiSearch, CiCircleAlert } from 'react-icons/ci';
 import { VscArrowRight } from "react-icons/vsc";
 import { Product } from '@/types/product';
 import axios from '@/lib/axios';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { useDebounce } from '@/hooks/useDebounce';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { pickLocale } from '@/lib/localized';
 

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import elsirag_logo from '../assets/elsirag_logo.png';
 import { CiSearch, CiGlobe, CiUser } from "react-icons/ci";
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import AdminMenu from './AdminMenu';
 import { SearchHandler, SearchHandlerMob } from './SearchHandler';
 import HoverMenu from './HoverMenu';
